@@ -26,4 +26,3 @@ RUN \
     apt-get upgrade -y bazel && \
     rm -rf /var/lib/apt/lists/* && \
     bazel version
-
