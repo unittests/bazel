@@ -2,7 +2,7 @@
 # the latest Bazel version and other development tools installed from binary
 # disribution.
 #
-# Approximate image size 830 MB, time to build 1m30s.
+# Approximate image size 1068 MB, time to build 1m30s.
 #
 # USAGE:
 #   # Download and build minimal Bazel dockerfile.
@@ -18,17 +18,25 @@
 #   docker run -ti development
 #
 
-# Using Minimal Bazel image (830 MB)
+# Using Minimal Bazel image (970 MB)
 FROM minimal
 
 # Install development software
-# TODO: install pylint, ibazel, python google flags and google test libs
+# TODO: install pylint, python google flags and google test libs
 RUN \
     apt-get update && \
-    apt-get install -y --no-install-recommends git && \
+    apt-get install -y --no-install-recommends git-core git-doc git-gui gitk && \
     apt-get install -y --no-install-recommends python && \
-    apt-get install -y --no-install-recommends gvim && \
+    apt-get install -y --no-install-recommends vim-gtk && \
     rm -rf /var/lib/apt/lists/*
+
+# Install Ibazel from sources
+RUN \
+    git clone https://github.com/bazelbuild/bazel-watcher /opt/bazel-watcher && \
+    cd /opt/bazel-watcher && \
+    bazel build //ibazel && \
+    cp /opt/bazel-watcher/bazel-bin/ibazel/linux_amd64_pure_stripped/ibazel /bin/ibazel && \
+    rm -rf /root/.cache/bazel
 
 # Add image test data
 COPY testdata /testdata

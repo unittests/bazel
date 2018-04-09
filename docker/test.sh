@@ -1,17 +1,13 @@
-#!/usr/bin/bash
+#!/bin/bash
 
 echo -------- 1. Minimal image testing.
 IMAGE=minimal
-echo TEST: ${IMAGE}: Bazel image test started
-echo TEST: ${IMAGE}: Building the image...
-time docker build -t ${IMAGE} ${IMAGE} || exit 1
-echo TEST: ${IMAGE}: Image built done
+docker build -t ${IMAGE} ${IMAGE} || exit 1
+docker run -t ${IMAGE} bazel version || exit 1
 
 echo -------- 2. Development image testing.
 IMAGE=development
-echo TEST: ${IMAGE}: Bazel image test started
-echo TEST: ${IMAGE}: Building the image...
-time docker build -t ${IMAGE} ${IMAGE} || exit 1
-echo TEST: ${IMAGE}: Image built done
+docker build -t ${IMAGE} ${IMAGE} || exit 1
+docker run -t -w testdata ${IMAGE} bazel test ... || exit 1
 
 echo TEST PASSED
